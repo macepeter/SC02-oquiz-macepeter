@@ -134,3 +134,40 @@ curl http://localhost:8080      # Incroyable, le client nous est servi par Apach
 exit
 docker rm -f apache
 ```
+
+## Et Oquiz dans tout ça ?
+
+On a besoin de créer 3 services (conteneurs) différents :
+- Un conteneur Postgres (BDD)
+- Un conteneur Node.js (API)
+- Un conteneur Nginx (Front)
+
+```sh
+  # Étape 1 - Créer un conteneur pour Postgres
+  docker run \                  # Créer un conteneur
+  -d \                          # Tâche de fond
+  --name oquiz-database \       # Nom du conteneur
+  -p 5433:5432 \                # Bind le port 5432 (à l'intérieur du conteneur, sur lequel tourne Postgres) vers le port 5433 (de l'hôte, que l'on peut contacter)
+  -e POSTGRES_USER=oquiz \      # Nom de l'utilisateur que l'on créé par défaut dans le conteneur
+  -e POSTGRES_PASSWORD=oquiz \  # Son mot de passe
+  -e POSTGRES_DB=oquiz \        # Nom de la base de données
+  postgres:17-alpine                   # Image de laquelle on part
+
+  # Se connecter en passant par bash
+  docker exec -it oquiz-database bash
+  psql -U oquiz -d oquiz
+  \dt
+  exit # Sortir de psql
+  exit # Sortir du conteneur
+
+  # Se connecter en passant par PSQL de l'hôte
+  psql -U oquiz -d oquiz -p 5433 -h localhost
+  exit
+
+```
+
+Ici :
+
+- le serveur Postgres tourne sur le port 5432 à l'intérieur du conteneur (pas accessible de l'extérieur)
+- on bind les port : on connecte ce port 5432 au port 5433 de notre hôte afin de pouvoir contacter Postgres depuis notre hôte
+- (pourquoi 5433 ? car notre 5432 est déjà utilisé par notre Postgres LOCAL, on veut éviter les conflits)

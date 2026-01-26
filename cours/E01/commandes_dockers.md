@@ -192,7 +192,7 @@ CMD ["node", "app.js"]
 ### Créer l'image à partir du Dockerfile
 
 ```sh
-sudo docker build . -t node-app:v1
+sudo docker build . -t <nom souhaité de l'image>:<nom de version>
 ```
 - ``` build ```: Commande qui sert à lancer la création de l'image à partir d'un Dockerfile
 - ``` . ```: Ici, on cible le dossier du Dockerfile. Si le Dockerfile est à un autre endroit de là où nous nous trouvons avec notre terminal, alors il faudra soit cibler l'endroit en question (à la place du .) soit se déplacer avec le terminal (commande ``` cd ```) dans le bon dossier.

@@ -1,0 +1,33 @@
+# Définir nos différents services/conteneurs
+services: 
+  # On crée nos 2 services à l'intérieur nommé database et api
+  # On appelle nos services comme on veut, j'aurais juste pu les appeler toto ou tata à la place de database et api si je le souhaite
+  
+  database:
+    image: postgres:17-alpine # On définit l'image sur laquelle va se baser notre conteneur
+    ports:  # On bind le port ici, il est possible de binder plusieurs port
+      - 5433:5432
+    environment: # On met ici nos variables d'environnement
+      POSTGRES_USER: oquiz
+      POSTGRES_PASSWORD: oquiz
+      POSTGRES_DB: oquiz
+    networks: # On attribue un ou plusieurs réseaux à notre service
+      - oquiz-network 
+  
+  api:
+    build: # On build l'image à partir de notre Dockerfile
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - database
+    networks:
+      - oquiz-network
+    environment: # On met ici nos variables d'environnement
+      NODE_ENV: developement
+      PORT: 3000
+      DATABASE_URL: postgres://oquiz:oquiz@database:5432/oquiz
+
+networks: # Déclarer un ou des réseaux
+  oquiz-network: # On déclare un réseau, ici on garde les propriétés par défaut
