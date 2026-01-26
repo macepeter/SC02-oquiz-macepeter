@@ -135,6 +135,8 @@ exit
 docker rm -f apache
 ```
 
+![](./resources/screens/dockerhub.png)
+
 ## Et Oquiz dans tout ça ?
 
 On a besoin de créer 3 services (conteneurs) différents :
@@ -171,3 +173,85 @@ Ici :
 - le serveur Postgres tourne sur le port 5432 à l'intérieur du conteneur (pas accessible de l'extérieur)
 - on bind les port : on connecte ce port 5432 au port 5433 de notre hôte afin de pouvoir contacter Postgres depuis notre hôte
 - (pourquoi 5433 ? car notre 5432 est déjà utilisé par notre Postgres LOCAL, on veut éviter les conflits)
+
+## Création d'image à l'aide de Dockerfile 
+
+```Dockerfile
+FROM IMAGE_DE_BASE
+
+RUN commande_a_lancer_lors_de_la_creation_de_l_image
+
+WORKDIR dossier_de_travail
+
+COPY des_fichiers_locaux des_fichiers_dans_l_image
+
+CMD les_instructions_a_lancer_lorsque_qqun_creer_un_conteneur_a_partir_de_cette_image
+```
+
+
+```bash
+# Commande pour générer l'image
+docker build \                         # Créer une image
+-t NOM_IMAGE \                         # Nom de l'image
+--build-arg VARIABLE=VALEUR \          # Ajout de variable de build
+dossier_ou_se_trouve_le_dockerfile     # comme son nom l'indique
+
+# Exemple 
+docker build -t oquiz-api api
+
+# Puis lancer un conteneur
+docker run \
+-d \
+-p 3001:3000 \
+-e PORT=3000 \
+-e DATABASE_URL=postgres://oquiz:oquiz@localhost:5433/oquiz \
+--name oquiz-api \
+oquiz-api
+
+# Inspection
+docker ps -a # Le conteneur a l'air down ? Pourquoi ? Regardons les logs du conteneur
+docker logs oquiz-api
+
+# Error : Error: P1001: Can't reach database server at `localhost:5433`
+# ==> Explication : un conteneur n'a pas le droit d'accéder à l'hôte !
+# ==> Comment on s'en sort ? On va placer les deux conteneurs (Postgres + API) dans un même docker - NETWORK 
+```
+
+A ce stade, ce que je devrais faire :
+- supprimer mon conteneur de BDD
+- supprimer mon conteneur d'API
+- créer un réseau
+- recreer le conteneur BDD, DANS le reseau
+- recreer le conteneur API, DANS le reseau
+
+MAIS on va faire mieux : docker compose
+
+# Docker compose
+
+Actuellement, pour gérer notre application complète il faut : 
+- créer un network
+- créer un conteneur Postgres dans le network
+- créer une image à partir du Dockerfile pour l'API
+- créer un conteneur pour l'API dans le network
+
+==> Beaucoup de commande à taper : automatiser/orchestrer avec un **docker-compose**
+
+==> Un fichier de configuration `docker-compose.yml` (ou `compose.yml`)
+
+
+
+```bash
+# Pour déclencher le docker-compose
+docker compose \
+-p oquiz \                 # nom du projet
+-f docker-compose.yml  \   # localisation du fichier compose
+--env-file=.env.docker     # fournir les variables d'environnement
+up  \                      # démarrer les service
+-d                         # Tâche de fond
+
+
+# Pour l'éteindre
+docker compose -p oquiz down
+```
+
+![](./resources/screens/orchestration-compose.png)
