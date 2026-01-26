@@ -1,33 +1,52 @@
-# Définir nos différents services/conteneurs
-services: 
-  # On crée nos 2 services à l'intérieur nommé database et api
-  # On appelle nos services comme on veut, j'aurais juste pu les appeler toto ou tata à la place de database et api si je le souhaite
-  
-  database:
-    image: postgres:17-alpine # On définit l'image sur laquelle va se baser notre conteneur
-    ports:  # On bind le port ici, il est possible de binder plusieurs port
-      - 5433:5432
-    environment: # On met ici nos variables d'environnement
+# Documentation de Docker compose : orchestration de conteneur
+# Sensible à l'indentation (comme en Python)
+
+services:                 # Liste des serveurs (nos conteneurs !)
+  database:                  # Nom de notre premier service (nom du conteneur dans le réseau !) 
+    image: postgres:17       # Image permettant de créer le conteneur
+    restart: unless-stopped  # Redémarre automatiquement mon service en cas de crash (sauf si je l'ai éteint manuellement)
+    networks:
+      - oquiz-network
+    volumes:
+      - oquiz-volume:/var/lib/postgresql/data  # je monte mon volume oquiz-data dans mon conteneur, là où Postgres écrit par défaut ses données lorsqu'il manipule les tables
+    environment:
       POSTGRES_USER: oquiz
       POSTGRES_PASSWORD: oquiz
       POSTGRES_DB: oquiz
-    networks: # On attribue un ou plusieurs réseaux à notre service
-      - oquiz-network 
-  
+    ports:                   # Si on a besoin de pouvoir contacter la BDD depuis l'extérieur, on peut rajouter ce binding de port, sinon pas besoin
+      - 5433:5432
+
   api:
-    build: # On build l'image à partir de notre Dockerfile
-      context: ./api
-      dockerfile: Dockerfile
+    build:                    # Plutôt que de partir d'une image existante, on demande à compose de générer l'image à partir de :
+      context: ./api          # ce dossier
+      dockerfile: Dockerfile  # ce Dockerfile
+    # image:                  # Pour partir d'une image existante, on pourrait plutôt utiliser cette syntaxe
+    #   oquiz-api             # Nom de l'image de laquelle on part
+    restart: unless-stopped   # Redémarre automatiquement mon service en cas de crash (sauf si je l'ai éteint manuellement)
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgres://oquiz:oquiz@database:5432/oquiz  # On lit directement dans le conteneur (database) puisqu'on est sur le meme network = le port 5432 j'ai accès depuis cet autre conteneur
     ports:
-      - 3000:3000
+      - 3001:3000
+    networks:
+      - oquiz-network
+    depends_on:
+      - database # On s'assure que le service "database" soit lancé avant de lancer ce service
+
+        # Service complémentaire : pour visualiser et manipuler la BDD via une interface graphique
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports: 
+      - 8080:8080
     depends_on:
       - database
     networks:
       - oquiz-network
-    environment: # On met ici nos variables d'environnement
-      NODE_ENV: developement
-      PORT: 3000
-      DATABASE_URL: postgres://oquiz:oquiz@database:5432/oquiz
+      
+networks:        # Liste des réseaux
+  oquiz-network: # Nom du réseau
 
-networks: # Déclarer un ou des réseaux
-  oquiz-network: # On déclare un réseau, ici on garde les propriétés par défaut
+volumes:         # Liste de nos volumes
+  oquiz-volume:  # Volume pour la persistance des données de la BDD (sur l'hôte, au cas où le conteneur est supprimé, les données restent !)
+  # Note : on aurait pu mettre un dosier local comme `./oquiz-data` que l'on ajoute au gitignore
