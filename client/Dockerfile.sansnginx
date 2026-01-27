@@ -1,0 +1,30 @@
+# On part de l'image node:22-alpine
+FROM node:22-alpine
+
+# On crée le répertoire de travail /app
+WORKDIR /app
+
+# Copie des fichiers package.json et package-lock.json dans /app
+# L'asteriske permet de spécifier qu'on veut tous les fichiers qui commencent par package et finissent par .json
+COPY package*.json .
+
+# Installation des dépendances
+RUN npm install
+
+# On copie le reste des fichiers
+COPY . .
+
+ARG API_URL
+ENV VITE_API_BASE_URL=${API_URL}
+
+# On build le projet (ce qui va créer un dossier dist avec le projet compilé)
+RUN npm run build
+
+# On documente le port qu'on va utiliser.
+# si on avait fait CMD ["npm", "run", "dev"] plus bas, on aurait exposé le port 5173
+EXPOSE 4173
+
+# Au lancement du conteneur, cette commande sera utilisé
+# La commande npm run preview a besoin de notre dossier dist, c'est pour ça qu'il faut builder avant le projet
+# Cette commande sert à visualier ce que l'on build. Vite fait un petit serveur avec le build.
+CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0"]
