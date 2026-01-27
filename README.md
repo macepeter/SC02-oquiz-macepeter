@@ -11,3 +11,4 @@
 
 ### E02
 - [Cours](./cours/E02/cours.md)
+- [Configuration VPS](./cours/E02/configuration_vm_kourou.md)
