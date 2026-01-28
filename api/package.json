@@ -15,7 +15,10 @@
     "db:generate": "prisma generate",
     "db:seed": "tsx --env-file=.env ./src/models/seeding.ts",
     "db:reset": "npm run db:migrate:reset && npm run db:seed",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "test:spec": "npx tsx --test --env-file=./test/config/.env.test --import ./test/config/global-setup.ts --experimental-test-isolation=none ./**/*.spec.test.ts",
+    "test": "npm run test:unit && npm run test:spec",
+    "test:unit": "tsx --test ./**/*.unit.test.ts"
   },
   "devDependencies": {
     "@prisma/client": "^6.11.1",
@@ -28,6 +31,7 @@
   },
   "dependencies": {
     "cors": "^2.8.6",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "zod": "^4.3.6"
   }
 }

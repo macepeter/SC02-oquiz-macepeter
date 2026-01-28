@@ -21,3 +21,15 @@ model User {
 
   @@map("user") // Correspondance entre le model User dans le code et la table "user" dans la BDD
 }
+
+model Level {
+
+  id Int @id @default(autoincrement())
+  name String @unique()
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@map("level")
+
+}
