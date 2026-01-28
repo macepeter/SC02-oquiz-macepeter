@@ -93,3 +93,36 @@ Ce travail de setup est à faire une fois, généralement en entreprise, c'est d
     - `--import`: permet d'importer un fichier, dans notre cas il s'agit de `./test/config/global-setup.ts`
     - `--experimental-test-isolation=none`: Cette option est généralement utilisée dans des scénarios de développement et de test spécifiques, où la flexibilité et la performance sont prioritaires.
     - `./**/*.spec.test.ts`: Permet de cibler tous les fichiers qui se termine par `.spec.test.ts`
+
+### Rappels
+
+#### Spread operator
+
+```js
+const person = {
+  pseudo: "Bob",
+  age: 42
+};
+
+const address = {
+  numero: 1,
+  road: "rue des crustacés",
+  city: "Bikini Bottom"
+};
+
+
+const total = {
+  ...person,
+  ...address
+};
+
+console.log(total); // { pseudo, age, numero, road, city }
+```
+
+#### Ternary operator
+
+```js
+console.log(Math.random() > 0.5 ? "grand" : "petit");
+//             ^ si vrai, alors l'ensemble de l'expression vaudra "grand"
+//             ^ si faux, alors l'ensemble de l'expression vaudra "petit"
+```

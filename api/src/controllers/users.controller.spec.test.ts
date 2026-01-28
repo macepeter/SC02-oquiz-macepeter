@@ -13,7 +13,11 @@ describe("[GET] /api/users", () => {
             const httpResponse = await fetch("http://localhost:7357/api/users");
             const body = await httpResponse.json()
         //ASSERT
-            console.log(body)
-            assert.ok(true)
+        for(let i = 0; i <= 1; i++) {
+            assert.strictEqual(body[i].firstname, databaseUsers[i].firstname)
+            assert.strictEqual(body[i].lastname, databaseUsers[i].lastname)
+            assert.strictEqual(body[i].email, databaseUsers[i].email)
+            assert.strictEqual(body[i].password, databaseUsers[i].password)
+        }
     })
 })
