@@ -22,3 +22,16 @@ export async function createLevel(req: Request, res: Response) {
   }
 
 }
+
+export async function getLevels(req: Request, res: Response) {
+  try {
+    const LevelSchema = z.object({ 
+      name: z.string().min(1)
+    });
+    const {data, error} = await LevelSchema.safeParseAsync(req.body)
+    const levels = await prisma.level.findMany();
+    res.status(200).json(levels);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}
