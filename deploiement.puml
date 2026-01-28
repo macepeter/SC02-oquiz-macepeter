@@ -1,0 +1,32 @@
+@startuml
+node "Serveur de production" <<device>> {
+
+    node "Docker Engine" <<executionEnvironment>> {
+
+        node "API" <<executionEnvironment>> {
+            artifact "Image API (Node.js)" <<dockerImage>>
+            component "Service API (Express)"
+        }
+
+        node "Client Web" <<executionEnvironment>> {
+            artifact "Image Client (Nginx)" <<dockerImage>>
+            component "Front-end (Build)"
+        }
+
+        node "PostgreSQL" <<database>> {
+            artifact "Image Postgres 17" <<dockerImage>>
+            component "Base de données OQuiz"
+        }
+
+        node "Adminer" <<executionEnvironment>> {
+            artifact "Image Adminer" <<dockerImage>>
+            component "Interface d'administration SQL"
+        }
+    }
+}
+
+"Client Web" --> "API" : HTTP 3000
+"API" --> "PostgreSQL" : Connexion 5432
+"Adminer" --> "PostgreSQL" : Connexion 5432
+@enduml
+
