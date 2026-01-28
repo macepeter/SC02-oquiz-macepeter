@@ -16,5 +16,6 @@
     "verbatimModuleSyntax": true,     // Avoir les imports de type via `import type`
     
     "skipLibCheck": true              // Ne pas checker le code TS des fichier .d.ts
-  }
+  },
+  "exclude": ["**/*.test.ts"]
 }
