@@ -35,6 +35,7 @@ before(async () => {
     execSync(`docker rm -f oquiztest`, { stdio: 'ignore' });
   } catch (error) {
     // Container doesn't exist, continue
+    console.log(error);
   }
 
   // Docker run command remains the same

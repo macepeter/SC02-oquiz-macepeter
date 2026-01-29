@@ -15,9 +15,9 @@ await prisma.level.createMany({
   data: [
     {name: "facile"},
     {name: "moyen"},
-      {name: "difficile"},
-    ]
-  });
+    {name: "difficile"},
+  ]
+});
 
 
-  console.log(`📊 Échantillonnage effectué avec succès.`);
+console.log(`📊 Échantillonnage effectué avec succès.`);
