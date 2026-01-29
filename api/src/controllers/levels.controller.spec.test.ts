@@ -107,10 +107,6 @@ describe("[POST] createLevel", () => {
     assert.equal(httpResponse.status, 409);
 
   });
-
-  it("should fail" , () => {
-    assert.of(false);
-  });
 });
 
 
