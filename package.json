@@ -4,7 +4,8 @@
   "description": "- [Repo de fin E01](https://github.com/O-clock-Francfort/SC02-oquiz/tree/e01)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/O-clock-Francfort/SC02-oquiz/issues"
   },
-  "homepage": "https://github.com/O-clock-Francfort/SC02-oquiz#readme"
+  "homepage": "https://github.com/O-clock-Francfort/SC02-oquiz#readme",
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
 }
