@@ -19,16 +19,21 @@
     "======= Pour les tests": "========================",
     "test:unit": "tsx --test ./**/*.unit.test.ts",
     "test:spec": "npx tsx --test --env-file=./test/config/.env.test --import ./test/config/global-setup.ts --experimental-test-isolation=none ./**/*.spec.test.ts",
-    "test": "npm run test:unit && npm run test:spec"
+    "test": "npm run test:unit && npm run test:spec",
+    "======= BONUS": "========================",
+    "eslint": "npx eslint"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@prisma/client": "^6.11.1",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.0.12",
+    "eslint": "^9.39.2",
     "prisma": "^6.11.1",
     "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0"
   },
   "dependencies": {
     "cors": "^2.8.6",

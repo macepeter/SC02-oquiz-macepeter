@@ -1,1 +1,2 @@
+npm run eslint --prefix api
 npm run test:spec --prefix api

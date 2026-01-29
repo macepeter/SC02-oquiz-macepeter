@@ -37,7 +37,9 @@ On y voit un peu mieux les services qui peuvent être rattaché mais c'est encor
 | <b>Deploy</b> | CD | <b>Déploiement de l'application dans l'environnement cible</b> | Mise en production de l'application, installation sur les serveurs, configuration des environnements |
 | <b>Operate</b> | CD | <b>Maintenance et gestion de l'application en production</b> | Surveillance des performances, gestion des incidents, mises à jour continues, optimisation |
 
-## Husky
+## Husky + ESLint
+
+### Husky
 
 Husky est un util qui permet de **gérer facilement des hooks Git** (scripts exécutés automatiquement à certaines étapes du cycle Git, comme `pre-commit`, `pre-push`, etc.) directement depuis votre projet.
 
@@ -45,3 +47,12 @@ En clair, il sert à **exécuter automatiquement des actions avant ou après cer
 
 [Documentation Husky](https://typicode.github.io/husky/get-started.html)
 
+### ESLint
+
+Il faut :
+- installer l'extension VSCode
+  - `ESLint` par `Microsoft`
+- installer Eslint dans le projet 
+  - `npm install --save-dev eslint @eslint/js typescript typescript-eslint --prefix api`
+- créer un fichier de configuration (dans le dossier api, parce que c'est là qu'on a installer eslint)
+  - `eslint.config.js` (a priori il y prend un fichier de config par défaut si non présent)
