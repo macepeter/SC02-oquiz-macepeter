@@ -2,6 +2,11 @@ import assert from "node:assert";
 import { describe, it } from "node:test";
 import { prisma } from "../models/index.ts";
 
+// RAPPEL : Utilisez la méthode triple AAA
+// Arrange
+// Act
+// Assert
+
 describe("[GET] getAllLevels", () => {
   it("Should return an empty array if there is no level in the database", async () => {
     // Pas besoin d'Arrange dans notre cas puisque la bdd est censée être vide
@@ -109,9 +114,44 @@ describe("[POST] createLevel", () => {
   });
 });
 
-
-// Arrange
+describe("[PATCH] updateLevel",  () => {
+  it("Should update and give us the updated properties", async () => {
+    // Arrange
+    const databaseLevel = await prisma.level.create({data: 
+      { name: "difficile" }
+    });
     
-// Act
+    // Act
+    const httpResponse = await fetch(`http://localhost:7357/api/levels/${databaseLevel.id}`, {
+      method: "PATCH",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({name: "facile"})
+    });
+    const body = await httpResponse.json();
+    
+    // Assert
+    assert.strictEqual(body.id, databaseLevel.id); // On vérifie qu'on a bien récupéré le même enregistrement de level
+    assert.notEqual(body.name, databaseLevel.name); // On vérifie que le level à bien changé sa valeur
 
-// Assert
+  });
+});
+
+describe("[DELETE] deleteLevel", () => {
+  it("Should delete the level and return a 204 status", async () => {
+    // Arrange
+    const databaseLevel = await prisma.level.create({data: 
+      { name: "difficile" }
+    });
+    
+    // Act
+    const httpResponse = await fetch(`http://localhost:7357/api/levels/${databaseLevel.id}`, {
+      method: "DELETE"
+    });
+
+    const element = await prisma.level.findUnique({ where: { id: databaseLevel.id } });
+    
+    // Assert
+    assert.ok(!element); // On vérifie que l'élément n'existe pas en BDD
+    assert.strictEqual(httpResponse.status, 204); // On vérifie que le status de la réponse est bien 204 
+  });
+});

@@ -79,7 +79,7 @@ export async function deleteLevel(req: Request, res: Response) {
 
     const deletedLevel = await prisma.level.delete({ where: {id: levelId} });
 
-    res.status(200).json(deletedLevel);
+    res.status(204).json(deletedLevel);
 
   } catch (error) {
     res.status(500).json({error});
