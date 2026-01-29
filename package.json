@@ -4,8 +4,7 @@
   "description": "- [Repo de fin E01](https://github.com/O-clock-Francfort/SC02-oquiz/tree/e01)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
