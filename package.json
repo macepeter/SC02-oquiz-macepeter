@@ -1,0 +1,20 @@
+{
+  "name": "sc02-oquiz",
+  "version": "1.0.0",
+  "description": "- [Repo de fin E01](https://github.com/O-clock-Francfort/SC02-oquiz/tree/e01)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/O-clock-Francfort/SC02-oquiz.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/O-clock-Francfort/SC02-oquiz/issues"
+  },
+  "homepage": "https://github.com/O-clock-Francfort/SC02-oquiz#readme"
+}

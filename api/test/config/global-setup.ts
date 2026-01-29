@@ -27,31 +27,24 @@ import { prisma } from "../../src/models/index.ts";
 let server: Server;
 
 // Hook before : s'exécute une fois avant l'ensemble des tests
-before(() => {
+// Cross-platform wait
+const wait = (ms:any) => new Promise(resolve => setTimeout(resolve, ms));
 
-  // (Hack) S'assurer que la BDD de test a bien été supprimé
-//   execSync(`docker rm -f oquiztest 2>/dev/null || true`); 
+before(async () => {
+  try {
+    execSync(`docker rm -f oquiztest`, { stdio: 'ignore' });
+  } catch (error) {
+    // Container doesn't exist, continue
+  }
+
+  // Docker run command remains the same
+  execSync(`docker run -d --name oquiztest -p ${process.env.POSTGRES_PORT}:5432 -e POSTGRES_USER=${process.env.POSTGRES_USER} -e POSTGRES_PASSWORD=${process.env.POSTGRES_PASSWORD} -e POSTGRES_DB=${process.env.POSTGRES_DB} postgres:17-alpine`);
   
-  // Créer un conteneur BDD dédié aux tests
-  execSync(`
-    docker run \
-    -d \
-    --name oquiztest \
-    -p ${process.env.POSTGRES_PORT}:5432 \
-    -e POSTGRES_USER=${process.env.POSTGRES_USER} \
-    -e POSTGRES_PASSWORD=${process.env.POSTGRES_PASSWORD} \
-    -e POSTGRES_DB=${process.env.POSTGRES_DB} \
-    postgres:17-alpine
-  `);
+  // Use Promise-based wait instead of shell sleep
+  await wait(1000);  // 1 second wait
 
-  // Attendre une petite seconde pour s'assurer qu'elle tourne bien
-  execSync(`sleep 1`);
-
-  // Lancer les migrations sur la BDD de test
-  // Note : les variables d'environnement (chargés via --env-file flag) sont passé au child process (execSync) par héritage 
   execSync(`npx prisma migrate deploy`);
 
-  // On lance un serveur de test
   server = app.listen(process.env.PORT);
 });
 
