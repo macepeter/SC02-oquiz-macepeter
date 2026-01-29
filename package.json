@@ -17,8 +17,5 @@
   "bugs": {
     "url": "https://github.com/O-clock-Francfort/SC02-oquiz/issues"
   },
-  "homepage": "https://github.com/O-clock-Francfort/SC02-oquiz#readme",
-  "devDependencies": {
-    "husky": "^9.1.7"
-  }
+  "homepage": "https://github.com/O-clock-Francfort/SC02-oquiz#readme"
 }
